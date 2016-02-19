@@ -10,10 +10,11 @@ A simple GUI dialog in QGIS to:
 ## Aim
 - Set file types to write by checklist
 - Vector files exported to a directory with the structure of:
-	```
-	├── export-directory
-	│   	├──Shp
-	│   	├──TAB
-	│   	├──DXF
-	│   	├──KML
-	```
+
+```
+├── export-directory
+│   	├──Shp
+│   	├──TAB
+│   	├──DXF
+│   	├──KML
+```
