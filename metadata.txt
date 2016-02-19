@@ -1,0 +1,39 @@
+# This file contains metadata for your plugin. Since 
+# version 2.0 of QGIS this is the proper way to supply 
+# information about a plugin. The old method of 
+# embedding metadata in __init__.py will 
+# is no longer supported since version 2.0.
+
+# This file should be included when you package your plugin.# Mandatory items:
+
+[general]
+name=Batch Save Layers
+qgisMinimumVersion=2.0
+description=Save open vector layers to one directory as shapefile
+version=0.1
+author=Robert Spiers
+email=rjspiers1@gmail.com
+
+about=Save all open vector layers to a specified directory as shapefiles.
+
+tracker=https://github.com/rjspiers/qgis-batch-save-layers
+repository=https://github.com/rjspiers/qgis-batch-save-layers
+# End of mandatory metadata
+
+# Recommended items:
+
+# Uncomment the following line and add your changelog:
+# changelog=
+
+# Tags are comma separated with spaces allowed
+tags=batch, bulk, export, save, vector
+
+homepage=https://github.com/rjspiers/qgis-batch-save-layers
+category=Plugins
+icon=icon.png
+# experimental flag
+experimental=False
+
+# deprecated flag (applies to the whole plugin, not just a single version)
+deprecated=False
+

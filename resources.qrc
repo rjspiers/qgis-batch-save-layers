@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/BatchSaveLayers" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
