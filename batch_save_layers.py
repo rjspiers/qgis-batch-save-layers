@@ -28,6 +28,7 @@ import resources
 # Import the code for the dialog
 from batch_save_layers_dialog import BatchSaveLayersDialog
 import os.path
+import os
 
 
 class BatchSaveLayers:
@@ -68,10 +69,10 @@ class BatchSaveLayers:
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(u'BatchSaveLayers')
         self.toolbar.setObjectName(u'BatchSaveLayers')
-		
+        
         self.dlg.lineEdit.clear()
-        self.dlg.toolButton.clicked.connect(self.select_output_directory)		
-		
+        self.dlg.toolButton.clicked.connect(self.select_output_directory)       
+        
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -208,7 +209,7 @@ class BatchSaveLayers:
         # Add layer_list array to listWidget
         self.dlg.listWidget.clear()
         self.dlg.listWidget.addItems(layer_list)
-		# qt-designer: check selection mode to choose layers
+        # qt-designer: check selection mode to choose layers
 
         # show the dialog
         self.dlg.show()
@@ -221,26 +222,97 @@ class BatchSaveLayers:
             # pass
             output_dir = self.dlg.lineEdit.text()
 
-            # Check if output_dir is not blank,
-            # Would be better to check if directory exists
-            if output_dir == "":
-                # QMessageBox.warning(None, "warning", "sometext")
-                self.iface.messageBar().pushMessage("No directory set", "Choose a directory to save the layers in.", 1, 5)
-            else:
+            # Check if output_dir is not blank, or doesn't exist
+            # if output_dir == "":
+                # # QMessageBox.warning(None, "warning", "sometext")
+                # self.iface.messageBar().pushMessage("No directory set", "Choose a directory to save the layers in.", 1, 5)
+            if not os.path.exists(output_dir):
+                self.iface.messageBar().pushMessage("No such directory", "Choose an existing directory to save the layers in.", 1, 5)
+            if os.path.exists(output_dir):
                 self.save_layers()
 
-    # save layers
     def save_layers(self):
+        # self.save_layers() = should be a function which checks the filetypes the user wants then fires the appropriate save functions
+        self.save_esri_shapefile()
+        self.save_mapinfo_file()
+        self.save_geojson()
+        self.save_kml()
+
+    # # save layers
+    # def save_layers(self):
+        # layers = self.iface.legendInterface().layers()
+        # output_dir = self.dlg.lineEdit.text()
+        # for f in layers:
+                # if f.type() == 0:
+                    # QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + "/" + f.name() + ".shp", "utf-8", f.crs(), "ESRI Shapefile")
+                    # self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".shp saved!", 0, 2)
+                # else:
+                    # pass
+
+    # save shp
+    def save_esri_shapefile(self):
         layers = self.iface.legendInterface().layers()
-        output_dir = self.dlg.lineEdit.text()
+        output_dir = self.dlg.lineEdit.text() + "/ESRI Shapefile/"
+        # create directory if it doesn't exist
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
         for f in layers:
                 if f.type() == 0:
-                    QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + "/" + f.name() + ".shp", "utf-8", f.crs(), "ESRI Shapefile")
-                    self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".shp saved!", 0, 2)
+                    writer = QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + f.name() + ".shp", "utf-8", f.crs(), "ESRI Shapefile")
+                    if writer == QgsVectorFileWriter.NoError:
+                        self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".shp saved to " + output_dir, 0, 2)
+                    else:
+                        self.iface.messageBar().pushMessage("Error saving layer:", f.name() + ".shp to " + output_dir, 1, 2)
                 else:
                     pass
 
-# for vLayer in iface.mapCanvas().layers():
-    # QgsVectorFileWriter.writeAsVectorFormat( vLayer, 
-        # myDir + vLayer.name() + ".shp", "utf-8", 
-        # vLayer.crs(), "ESRI Shapefile")
+    # save MapInfo File
+    def save_mapinfo_file(self):
+        layers = self.iface.legendInterface().layers()
+        output_dir = self.dlg.lineEdit.text() + "/Mapinfo File/"
+        # create directory if it doesn't exist
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        for f in layers:
+                if f.type() == 0:
+                    writer = QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + f.name() + ".TAB", "utf-8", f.crs(), "MapInfo File")
+                    if writer == QgsVectorFileWriter.NoError:
+                        self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".TAB saved to " + output_dir, 0, 2)
+                    else:
+                        self.iface.messageBar().pushMessage("Error saving layer:", f.name() + ".TAB to " + output_dir, 1, 2)
+                else:
+                    pass
+
+    # save GeoJSON
+    def save_geojson(self):
+        layers = self.iface.legendInterface().layers()
+        output_dir = self.dlg.lineEdit.text() + "/GeoJSON/"
+        # create directory if it doesn't exist
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        for f in layers:
+                if f.type() == 0:
+                    writer = QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + f.name() + ".geojson", "utf-8", f.crs(), "GeoJSON")
+                    if writer == QgsVectorFileWriter.NoError:
+                        self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".geojson saved to " + output_dir, 0, 2)
+                    else:
+                        self.iface.messageBar().pushMessage("Error saving layer:", f.name() + ".geojson to " + output_dir, 1, 2)
+                else:
+                    pass
+
+    # save KML
+    def save_kml(self):
+        layers = self.iface.legendInterface().layers()
+        output_dir = self.dlg.lineEdit.text() + "/KML/"
+        # create directory if it doesn't exist
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        for f in layers:
+                if f.type() == 0:
+                    writer = QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + f.name() + ".kml", "utf-8", None, "KML")
+                    if writer == QgsVectorFileWriter.NoError:
+                        self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".kml saved to " + output_dir, 0, 2)
+                    else:
+                        self.iface.messageBar().pushMessage("Error saving layer:", f.name() + ".kml to " + output_dir, 1, 2)
+                else:
+                    pass
