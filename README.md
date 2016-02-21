@@ -19,5 +19,8 @@ A simple GUI dialog in QGIS to:
 │   	├──PGDump
 ```
 
-## GUI
+## Icon
+![image of icon](https://raw.githubusercontent.com/rjspiers/qgis-batch-save-layers/master/icon.png)
+
+## GUI Dialog 
 ![image of GUI](https://raw.githubusercontent.com/rjspiers/qgis-batch-save-layers/gh-pages/batch-save-layers-dialog.png)
