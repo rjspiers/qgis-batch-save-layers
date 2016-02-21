@@ -203,13 +203,10 @@ class BatchSaveLayers:
                     layer_list.append(layer.name())
                 else:
                     pass
-        # # Add layer_list array to comboBox
-        # self.dlg.comboBox.clear()
-        # self.dlg.comboBox.addItems(layer_list)
         # Add layer_list array to listWidget
         self.dlg.listWidget.clear()
         self.dlg.listWidget.addItems(layer_list)
-        # qt-designer: check selection mode to choose layers
+        # qt-designer: could use a selection mode for the layers
 
         # show the dialog
         self.dlg.show()
@@ -222,32 +219,71 @@ class BatchSaveLayers:
             # pass
             output_dir = self.dlg.lineEdit.text()
 
-            # Check if output_dir is not blank, or doesn't exist
-            # if output_dir == "":
-                # # QMessageBox.warning(None, "warning", "sometext")
-                # self.iface.messageBar().pushMessage("No directory set", "Choose a directory to save the layers in.", 1, 5)
             if not os.path.exists(output_dir):
                 self.iface.messageBar().pushMessage("No such directory", "Choose an existing directory to save the layers in.", 1, 5)
             if os.path.exists(output_dir):
                 self.save_layers()
 
     def save_layers(self):
-        # self.save_layers() = should be a function which checks the filetypes the user wants then fires the appropriate save functions
-        self.save_esri_shapefile()
-        self.save_mapinfo_file()
-        self.save_geojson()
-        self.save_kml()
+        # if checkbox is checked, run the appropriate save function
+        if self.dlg.checkBox_shp.isChecked():
+            self.save_esri_shapefile()
+        else:
+            pass
+        if self.dlg.checkBox_tab.isChecked():
+            self.save_mapinfo_file()
+        else:
+            pass
+        if self.dlg.checkBox_geojson.isChecked():
+            self.save_geojson()
+        else:
+            pass
+        if self.dlg.checkBox_kml.isChecked():
+            self.save_kml()
+        else:
+            pass
+        if self.dlg.checkBox_pgdump.isChecked():
+            self.save_pgdump()
+        else:
+            pass
+        if self.dlg.checkBox_csv.isChecked():
+            self.save_csv()
+        else:
+            pass
 
-    # # save layers
-    # def save_layers(self):
-        # layers = self.iface.legendInterface().layers()
-        # output_dir = self.dlg.lineEdit.text()
-        # for f in layers:
-                # if f.type() == 0:
-                    # QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + "/" + f.name() + ".shp", "utf-8", f.crs(), "ESRI Shapefile")
-                    # self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".shp saved!", 0, 2)
-                # else:
-                    # pass
+    # save CSV
+    def save_csv(self):
+        layers = self.iface.legendInterface().layers()
+        output_dir = self.dlg.lineEdit.text() + "/CSV/"
+        # create directory if it doesn't exist
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        for f in layers:
+                if f.type() == 0:
+                    writer = QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + f.name() + ".csv", "utf-8", f.crs(), "CSV")
+                    if writer == QgsVectorFileWriter.NoError:
+                        self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".csv saved to " + output_dir, 0, 2)
+                    else:
+                        self.iface.messageBar().pushMessage("Error saving layer:", f.name() + ".csv to " + output_dir, 1, 2)
+                else:
+                    pass
+
+    # save PGDump
+    def save_pgdump(self):
+        layers = self.iface.legendInterface().layers()
+        output_dir = self.dlg.lineEdit.text() + "/PGDump/"
+        # create directory if it doesn't exist
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+        for f in layers:
+                if f.type() == 0:
+                    writer = QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + f.name() + ".sql", "utf-8", f.crs(), "PGDump")
+                    if writer == QgsVectorFileWriter.NoError:
+                        self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".sql saved to " + output_dir, 0, 2)
+                    else:
+                        self.iface.messageBar().pushMessage("Error saving layer:", f.name() + ".sql to " + output_dir, 1, 2)
+                else:
+                    pass
 
     # save shp
     def save_esri_shapefile(self):
