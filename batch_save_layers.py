@@ -67,8 +67,8 @@ class BatchSaveLayers:
         self.actions = []
         self.menu = self.tr(u'&Batch Save Layers')
         # TODO: We are going to let the user set this up in a future iteration
-        self.toolbar = self.iface.addToolBar(u'BatchSaveLayers')
-        self.toolbar.setObjectName(u'BatchSaveLayers')
+        # self.toolbar = self.iface.addToolBar(u'BatchSaveLayers')
+        # self.toolbar.setObjectName(u'BatchSaveLayers')
         
         self.dlg.lineEdit.clear()
         self.dlg.toolButton.clicked.connect(self.select_output_directory)       
@@ -97,7 +97,7 @@ class BatchSaveLayers:
         callback,
         enabled_flag=True,
         add_to_menu=True,
-        add_to_toolbar=True,
+        add_to_toolbar=False,
         status_tip=None,
         whats_this=None,
         parent=None):
@@ -173,6 +173,12 @@ class BatchSaveLayers:
             callback=self.run,
             parent=self.iface.mainWindow())
 
+        # add to plugin toolbar
+        self.action1 = QAction(
+            QIcon(":/plugins/BatchSaveLayers/icon.png"),
+            u"Batch Save Layers", self.iface.mainWindow())
+        self.iface.addToolBarIcon(self.action1)
+        self.action1.triggered.connect(self.run)
 
     def unload(self):
         """Removes the plugin menu item and icon from QGIS GUI."""
@@ -182,8 +188,10 @@ class BatchSaveLayers:
                 action)
             self.iface.removeToolBarIcon(action)
         # remove the toolbar
-        del self.toolbar
+        # del self.toolbar
 
+        # remove from plugin toolbar
+        self.iface.removeToolBarIcon(self.action1)
 
     # Select output file 
     def select_output_directory(self):
@@ -260,7 +268,7 @@ class BatchSaveLayers:
             os.makedirs(output_dir)
         for f in layers:
                 if f.type() == 0:
-                    writer = QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + f.name() + ".csv", "utf-8", f.crs(), "CSV")
+                    writer = QgsVectorFileWriter.writeAsVectorFormat( f, output_dir + f.name() + ".csv", "utf-8", f.crs(), "CSV", layerOptions='GEOMETRY=AS_WKT')
                     if writer == QgsVectorFileWriter.NoError:
                         self.iface.messageBar().pushMessage("Layer Saved", f.name() + ".csv saved to " + output_dir, 0, 2)
                     else:
