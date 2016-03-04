@@ -10,11 +10,11 @@
 name=Batch Save Layers
 qgisMinimumVersion=2.0
 description=Save open vector layers as different file types simultaneously.
-version=0.1
+version=0.3
 author=Robert Spiers
 email=rjspiers1@gmail.com
 
-about=A simple GUI dialog to save opened vector layers as various file types simultaneously. User selected file types are saved to separate folders. View the homepage for detailed description.
+about=View the homepage for detailed description: http://rjspiers.github.io/qgis-batch-save-layers/
 
 tracker=https://github.com/rjspiers/qgis-batch-save-layers/issues
 repository=https://github.com/rjspiers/qgis-batch-save-layers
@@ -23,16 +23,18 @@ repository=https://github.com/rjspiers/qgis-batch-save-layers
 # Recommended items:
 
 # Uncomment the following line and add your changelog:
-# changelog=
+changelog=0.3 - Added checkbox to specify filetypes to export
+ <p>0.2 - Added more filetypes to export
+ <p>0.1 - Created plugin
 
 # Tags are comma separated with spaces allowed
-tags=batch, bulk, export, save
+tags=batch, export, save, vector
 
 homepage=http://rjspiers.github.io/qgis-batch-save-layers/
 category=Plugins
 icon=icon.png
 # experimental flag
-experimental=False
+experimental=True
 
 # deprecated flag (applies to the whole plugin, not just a single version)
 deprecated=False
