@@ -24,3 +24,8 @@ A simple GUI dialog in QGIS to:
 
 ## GUI Dialog 
 ![image of GUI](https://raw.githubusercontent.com/rjspiers/qgis-batch-save-layers/gh-pages/batch-save-layers-dialog.png)
+
+##Planned
+- Write metadata file to export-directory
+- Option to zip
+- Specify layers to export
